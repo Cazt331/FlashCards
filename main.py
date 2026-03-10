@@ -1,6 +1,7 @@
 import flet as ft
 import json
 import os
+import random
 
 def main(page: ft.Page):
     # Configuración de la ventana (Simulando Android en escritorio)
@@ -121,15 +122,26 @@ def main(page: ft.Page):
     def next_card():
         nonlocal current_index
         current_index += 1
+        if current_mode == "review":
+            # Si aún quedan tarjetas por repasar, volvemos a empezar (en orden aleatorio)
+            if current_index >= len(current_list) and current_list:
+                random.shuffle(current_list)
+                current_index = 0
         show_card()
 
     def mark_correct(e):
+        nonlocal current_index
         word_data = current_list[current_index]
         if current_mode == "review":
             word_data["streak"] += 1
             if word_data["streak"] >= 5:
+                # Superada: la sacamos de la lista de repaso de esta sesión
                 word_data["review"] = False
                 word_data["streak"] = 0
+                current_list.pop(current_index)
+                save_data()
+                show_card()
+                return
         save_data()
         next_card()
 
@@ -205,9 +217,11 @@ def main(page: ft.Page):
         current_index = 0
 
         if mode == "study":
-            current_list = vocab
+            current_list = vocab.copy()
         else:
             current_list = [w for w in vocab if w.get("review") == True]
+
+        random.shuffle(current_list)
 
         if not current_list:
             page.snack_bar = ft.SnackBar(ft.Text("No hay palabras en esta sección."))
