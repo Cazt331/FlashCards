@@ -1,7 +1,43 @@
 [
     {
-        "en": "Book",
-        "es": "Libro",
+        "en": "Cheese",
+        "es": "Queso",
+        "pron": "chis",
+        "review": true,
+        "streak": 2
+    },
+    {
+        "en": "Yoghurt",
+        "es": "Yogurt",
+        "pron": "Yogurt",
+        "review": true,
+        "streak": 1
+    },
+    {
+        "en": "Coke",
+        "es": "Couk",
+        "pron": "Coca cola",
+        "review": false,
+        "streak": 0
+    },
+    {
+        "en": "water",
+        "es": "agua",
+        "pronunciation": "guater",
+        "review": false,
+        "streak": 0
+    },
+    {
+        "en": "pencil",
+        "es": "lapicero",
+        "pronunciation": "pencil",
+        "review": true,
+        "streak": 2
+    },
+    {
+        "en": "phone",
+        "es": "telefono",
+        "pronunciation": "fone",
         "review": false,
         "streak": 0
     }

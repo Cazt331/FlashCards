@@ -127,7 +127,7 @@ def main(page: ft.Page):
     def next_card():
         nonlocal current_index
         current_index += 1
-        if current_mode == "review":
+        if current_mode in ["review", "study"]:
             # Si aún quedan tarjetas por repasar, volvemos a empezar (en orden aleatorio)
             if current_index >= len(current_list) and current_list:
                 random.shuffle(current_list)
