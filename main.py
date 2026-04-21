@@ -76,6 +76,7 @@ def main(page: ft.Page):
     # PANTALLA: AGREGAR PALABRAS
     # ---------------------------------------------------------
     en_input = ft.TextField(label="Palabra en Inglés", width=300, autofocus=True)
+    pron_input = ft.TextField(label="Pronunciación (opcional)", width=300)
     es_input = ft.TextField(label="Traducción en Español", width=300)
 
     def add_word(e):
@@ -83,11 +84,13 @@ def main(page: ft.Page):
             vocab.append({
                 "en": en_input.value.strip(),
                 "es": es_input.value.strip(),
+                "pronunciation": pron_input.value.strip() if pron_input.value else "",
                 "review": False,
                 "streak": 0
             })
             save_data()
             en_input.value = ""
+            pron_input.value = ""
             es_input.value = ""
             page.snack_bar = ft.SnackBar(ft.Text("¡Palabra agregada con éxito!"))
             page.snack_bar.open = True
@@ -97,6 +100,7 @@ def main(page: ft.Page):
     add_view.controls = [
         ft.Text("Nueva Palabra", size=25, weight="bold"),
         en_input,
+        pron_input,
         es_input,
         ft.Button("Guardar", on_click=add_word, width=300, height=50, bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE),
         ft.TextButton("Volver al Menú", on_click=show_main)
@@ -116,6 +120,7 @@ def main(page: ft.Page):
     current_mode = ""
 
     lbl_word = ft.Text("", size=35, weight="bold", text_align=ft.TextAlign.CENTER)
+    lbl_pronunciation = ft.Text("", size=20, color=ft.Colors.BLUE_400, text_align=ft.TextAlign.CENTER)
     lbl_translation = ft.Text("", size=25, color=ft.Colors.GREEN_400, visible=False, text_align=ft.TextAlign.CENTER)
     lbl_streak = ft.Text("", size=14, color=ft.Colors.GREY_400, visible=False)
 
@@ -165,7 +170,7 @@ def main(page: ft.Page):
 
     card_container = ft.Container(
         content=ft.Column(
-            [lbl_streak, lbl_word, lbl_translation], 
+            [lbl_streak, lbl_word, lbl_pronunciation, lbl_translation], 
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             alignment=ft.MainAxisAlignment.CENTER
         ),
@@ -190,6 +195,7 @@ def main(page: ft.Page):
         if current_index < len(current_list):
             word = current_list[current_index]
             lbl_word.value = word["en"]
+            lbl_pronunciation.value = f"[{word.get('pronunciation', '')}]" if word.get('pronunciation') else ""
             lbl_translation.value = word["es"]
             
             if current_mode == "review":
@@ -204,6 +210,7 @@ def main(page: ft.Page):
         else:
             lbl_streak.visible = False
             lbl_word.value = "¡Completado!"
+            lbl_pronunciation.value = ""
             lbl_translation.value = "Has terminado todas las tarjetas de esta sesión."
             lbl_translation.color = ft.Colors.BLUE_400
             lbl_translation.visible = True
